@@ -23,7 +23,7 @@ except ImportError:
 st.set_page_config(
     page_title="AI Finans Asistanı Pro",
     page_icon="💰",
-
+(
 
 # API Configuration - Use environment variable or default to localhost
 API_URL = os.getenv("API_URL", "http://localhost:8000")
@@ -1052,4 +1052,5 @@ st.markdown("""
     💰 AI Finans Asistanı Pro v2.0 | Powered by Groq AI
 </div>
 """, unsafe_allow_html=True)
+
 
