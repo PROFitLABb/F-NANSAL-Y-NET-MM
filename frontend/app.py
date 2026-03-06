@@ -3,13 +3,19 @@ import requests
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import streamlit as st
+import requests
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 from datetime import datetime, timedelta
 from io import BytesIO
-from reportlab.lib.pagesizes import letter, A4
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-from reportlab.lib import colors
+import os
+from datetime import datetime, timedelta
+from io import BytesIO
+
+
+# Page config
 
 # Page config
 st.set_page_config(
