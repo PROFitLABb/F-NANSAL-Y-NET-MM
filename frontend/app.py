@@ -3,16 +3,16 @@ import requests
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import streamlit as st
-import requests
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 from datetime import datetime, timedelta
 from io import BytesIO
 import os
-from datetime import datetime, timedelta
-from io import BytesIO
+
+# Import AI helper for direct analysis
+try:
+    from frontend.ai_helper import analyze_expense_with_ai
+    AI_AVAILABLE = True
+except:
+    AI_AVAILABLE = False
 
 
 # Page config
@@ -351,14 +351,36 @@ elif "Harcama Analizi" in st.session_state.page:
         if st.button("🔄 Temizle", use_container_width=True):
             st.rerun()
     
-    if analyze_btn and expense_text:
+       if analyze_btn and expense_text:
         with st.spinner("🤖 AI harcamalarınızı analiz ediyor..."):
             try:
-                response = requests.post(
-                    f"{API_URL}/analyze",
-                    json={"text": expense_text, "provider": "groq"},
-                    timeout=30
-                )
+                # Try direct AI analysis first (for Streamlit Cloud)
+                if AI_AVAILABLE:
+                    result = analyze_expense_with_ai(expense_text)
+                    
+                    if 'error' not in result:
+                        st.session_state.analysis_result = result
+                        st.success("✅ Analiz tamamlandı!")
+                    else:
+                        st.error(f"❌ {result['error']}")
+                else:
+                    # Fallback to backend API
+                    response = requests.post(
+                        f"{API_URL}/analyze",
+                        json={"text": expense_text, "provider": "groq"},
+                        timeout=30
+                    )
+                    
+                    if response.status_code == 200:
+                        result = response.json()
+                        st.session_state.analysis_result = result
+                        st.success("✅ Analiz tamamlandı!")
+                    else:
+                        st.error("❌ Analiz hatası.")
+                    
+            except Exception as e:
+                st.error(f"❌ Hata: {str(e)}")
+
                 
                 if response.status_code == 200:
                     result = response.json()
