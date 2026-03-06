@@ -94,13 +94,29 @@ with st.sidebar:
     st.title("💰 Finans Asistanı Pro")
     st.markdown("---")
     
+       # Check if backend is available
+    BACKEND_AVAILABLE = False
+    try:
+        response = requests.get(f"{API_URL}/health", timeout=2)
+        BACKEND_AVAILABLE = response.status_code == 200
+    except:
+        pass
+    
+    if BACKEND_AVAILABLE:
+        menu_options = ["🏠 Ana Sayfa", "📊 Dashboard", "💸 Harcama Analizi", "💰 Gelir Takibi", 
+                       "🎯 Bütçe Yönetimi", "🎯 Hedefler", "🔄 Düzenli Ödemeler", 
+                       "📈 Raporlar", "⚙️ Ayarlar"]
+    else:
+        menu_options = ["💸 Harcama Analizi"]
+        st.warning("⚠️ Backend bağlantısı yok. Sadece harcama analizi kullanılabilir.")
+    
     page = st.radio(
         "Menü",
-        ["🏠 Ana Sayfa", "📊 Dashboard", "💸 Harcama Analizi", "💰 Gelir Takibi", 
-         "🎯 Bütçe Yönetimi", "🎯 Hedefler", "🔄 Düzenli Ödemeler", 
-         "📈 Raporlar", "⚙️ Ayarlar"],
+        menu_options,
         key="navigation"
     )
+
+
     st.session_state.page = page
     
     st.markdown("---")
@@ -1052,6 +1068,7 @@ st.markdown("""
     💰 AI Finans Asistanı Pro v2.0 | Powered by Groq AI
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
