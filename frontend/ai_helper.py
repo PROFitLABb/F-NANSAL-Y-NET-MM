@@ -1,4 +1,3 @@
-
 import os
 import json
 from groq import Groq
@@ -63,7 +62,6 @@ IMPORTANT:
 def analyze_expense_with_ai(expense_text: str) -> dict:
     """Analyze expense text using Groq AI"""
     try:
-        # Get API key from secrets or environment
         api_key = st.secrets.get("GROQ_API_KEY", os.getenv("GROQ_API_KEY", ""))
         
         if not api_key:
@@ -90,7 +88,6 @@ def analyze_expense_with_ai(expense_text: str) -> dict:
         
         response_text = completion.choices[0].message.content
         
-        # Try to extract JSON from response
         if "```json" in response_text:
             response_text = response_text.split("```json")[1].split("```")[0].strip()
         elif "```" in response_text:
