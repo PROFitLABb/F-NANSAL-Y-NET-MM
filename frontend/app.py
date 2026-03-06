@@ -8,19 +8,22 @@ from io import BytesIO
 import os
 
 # Import AI helper for direct analysis
+AI_AVAILABLE = False
 try:
-    from frontend.ai_helper import analyze_expense_with_ai
+    from ai_helper import analyze_expense_with_ai
     AI_AVAILABLE = True
-except:
-    AI_AVAILABLE = False
+except ImportError:
+    try:
+        from frontend.ai_helper import analyze_expense_with_ai
+        AI_AVAILABLE = True
+    except ImportError:
+        pass
 
 # Page config
 st.set_page_config(
     page_title="AI Finans Asistanı Pro",
     page_icon="💰",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+
 
 # API Configuration - Use environment variable or default to localhost
 API_URL = os.getenv("API_URL", "http://localhost:8000")
@@ -1049,3 +1052,4 @@ st.markdown("""
     💰 AI Finans Asistanı Pro v2.0 | Powered by Groq AI
 </div>
 """, unsafe_allow_html=True)
+
